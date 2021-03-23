@@ -7,19 +7,23 @@ host = "3.35.255.138"
 connection = pymongo.MongoClient(f"mongodb://{username}:{password}@{host}")
 
 
-db = connection.test_db
+books = connection.books
 
+it_book = books.it_book
 
-result = db.zip.aggregate([
-    {'$group' : {
+data = list()
 
-        '_id' : 'null',
-        'count' : {'$sum' : 1}
-
-    }}
-])
+for index in range(100):
+    data.append({"author":"joey" , "publisher": "fun"})
 
 
 
-for col in result:
-    print(col)
+books = it_book.find()
+
+for book in books:
+    print(book)
+
+it_book.update_many({}, {"$set" : {"donggu" : "zzang"}})
+
+
+
