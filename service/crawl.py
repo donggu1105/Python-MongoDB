@@ -11,7 +11,7 @@ host = "3.35.255.138"
 conn = pymongo.MongoClient(f"mongodb://{username}:{password}@{host}")
 
 actor_db = conn.cine21
-actor_collection = actor_db.actor_collection
+actor_collection = actor_db.actor_colleciton
 
 
 
@@ -78,18 +78,35 @@ actor_collection = actor_db.actor_collection
 #
 # actor_collection.insert_many(actors_detail_info)
 
-# data_list = actor_collection.find({'출연영화' : {"$size" : 2}})
-#
-#
-# for data in data_list:
-#     print(data)
-
 # 특수한 정규 표현식
-
+#
 # Greedy vs. NonGreedy
 # . 문자ㅡㄴ 줄바꿈 누자인 \n 을 제외한 모든 문자 한개를 의미함
 #  * 는 앞 문자가 0번또는 그 이상 반복되는 패턴
 
-data_list = actor_collection.find({"출연영화" : {"$elemMatch" : ["국가부도의 날"]}}).sort("흥행지수", pymongo.DESCENDING).limit(10)
-for data in data_list:
-     print(data)
+# key ["필드명" , direction]
+#      -pymongo.ASCENDING = 1
+#
+
+# actor_collection.create_index([('출연영화', 'text')])
+
+
+
+# actor_collection.create_index([('출연영화', pymongo.TEXT), ('직업', pymongo.TEXT)])
+#
+# print(actor_collection.index_information())
+#
+# docs = actor_collection.find({'출연영화' : {'$reg' : '미나리'}})
+#
+# for doc in docs:
+#      print(doc)
+#
+#
+# actor_collection.drop_indexes()
+
+# actor_collection.create_index([('학교', pymongo.TEXT)])
+
+docs = actor_collection.find({'$text' : {'$search' : '홍익대학교'}}).sort('흥행지수', pymongo.DESCENDING).limit(10)
+
+for doc in docs:
+     print(doc)
